@@ -160,6 +160,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        // personal provider
+        App\Providers\v1\FlightServiceProvider::class,
+
     ],
 
     /*
