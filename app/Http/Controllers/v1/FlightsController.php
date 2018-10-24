@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\v1;
 
+use Validator;
 use Illuminate\Http\Request;
 use App\Services\v1\FlightsService;
 use App\Http\Controllers\Controller;
@@ -38,14 +39,24 @@ class FlightsController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'arrival.datetime' => 'required|date'
+            ]
+        );
+
+        if ($validator->fails()) {
+            //pass validator errors as errors object for ajax response
+            return response()->json(['errors'=>$validator->errors()]);
+        }
+
         try {
             $flight = $this->flights->createFlight($request);
             return response()->json($flight, 201);
         } catch (\Exception $e) {
             return response()->json(['message'=>$e->getMessage()], 500);
         }
-
-
     }
 
     /**
@@ -71,6 +82,18 @@ class FlightsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'arrival.datetime' => 'required|date'
+            ]
+        );
+
+        if ($validator->fails()) {
+            //pass validator errors as errors object for ajax response
+            return response()->json(['errors'=>$validator->errors()]);
+        }
+
         try {
             $flight = $this->flights->updateFlight($request,$id);
             return response()->json($flight, 200);
