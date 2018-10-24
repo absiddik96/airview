@@ -15,6 +15,7 @@ class FlightsController extends Controller
     function __construct(FlightsService $service)
     {
         $this->flights = $service;
+        $this->middleware('auth:api',['only'=>['store','update','destroy']]);
     }
 
 
@@ -39,17 +40,17 @@ class FlightsController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'arrival.datetime' => 'required|date'
-            ]
-        );
+        // $validator = Validator::make(
+        //     $request->all(),
+        //     [
+        //         'arrival.datetime' => 'required|date'
+        //     ]
+        // );
 
-        if ($validator->fails()) {
-            //pass validator errors as errors object for ajax response
-            return response()->json(['errors'=>$validator->errors()]);
-        }
+        // if ($validator->fails()) {
+        //     //pass validator errors as errors object for ajax response
+        //     return response()->json(['errors'=>$validator->errors()]);
+        // }
 
         try {
             $flight = $this->flights->createFlight($request);
